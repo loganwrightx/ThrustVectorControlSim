@@ -18,7 +18,12 @@ class PID:
   upper_bound: float
   lower_bound: float
   
-  def __init__(self, kp: float, ki: float, kd: float, setpoint: float, update_frequency: int | float, t: float, upper_bound: float, lower_bound: float):
+  lag_steps: int = 0
+  steps: int = 0
+  
+  output: float = 0.0
+  
+  def __init__(self, kp: float, ki: float, kd: float, setpoint: float, update_frequency: int | float, t: float, upper_bound: float, lower_bound: float, lag_steps: int):
     self.kp = kp
     self.ki = ki
     self.kd = kd
@@ -28,6 +33,7 @@ class PID:
     self.t_last = t
     self.upper_bound = upper_bound
     self.lower_bound = lower_bound
+    self.lag_steps = lag_steps
   
   def step(self, t: float, state_variable: float) -> float | None:
     if t - self.t_last >= self.dt:
@@ -35,13 +41,17 @@ class PID:
       self.ie += (self.e + (self.setpoint - state_variable)) / 2 * (t - self.t_last) # trapezoidal integration
       self.e = (self.setpoint - state_variable)
       self.t_last = t
-      output = self.kp * self.e + self.ki * self.ie + self.kd * self.de
-      
-      if output > self.upper_bound:
+      self.output = self.kp * self.e + self.ki * self.ie + self.kd * self.de
+      self.steps += 1
+      return None
+    
+    if self.steps >= self.lag_steps:
+      self.steps = 0
+      if self.output > self.upper_bound:
         return self.upper_bound
-      elif output < self.lower_bound:
+      elif self.output < self.lower_bound:
         return self.lower_bound
       else:
-        return output
+        return self.output
     
     return None
