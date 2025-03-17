@@ -1,0 +1,3 @@
+# Inverted Pendulum Problem
+
+This project aims to implement a PID controller to solve the inverted pendulum problem for variable mass systems.

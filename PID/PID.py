@@ -2,6 +2,7 @@ from __future__ import annotations
 from numpy import ndarray
 from typing import Tuple, overload
 
+get_sign = lambda reverse: -1.0 if reverse else 1.0
 class PID:
   kp: float
   ki: float
@@ -23,7 +24,9 @@ class PID:
   
   output: float = 0.0
   
-  def __init__(self, kp: float, ki: float, kd: float, setpoint: float, update_frequency: int | float, t: float, upper_bound: float, lower_bound: float, lag_steps: int):
+  reverse: bool
+  
+  def __init__(self, kp: float, ki: float, kd: float, setpoint: float, update_frequency: int | float, t: float, upper_bound: float, lower_bound: float, lag_steps: int, reverse: bool = False):
     self.kp = kp
     self.ki = ki
     self.kd = kd
@@ -34,6 +37,7 @@ class PID:
     self.upper_bound = upper_bound
     self.lower_bound = lower_bound
     self.lag_steps = lag_steps
+    self.reverse = reverse
   
   def step(self, t: float, state_variable: float) -> float | None:
     if t - self.t_last >= self.dt:
@@ -48,10 +52,10 @@ class PID:
     if self.steps >= self.lag_steps:
       self.steps = 0
       if self.output > self.upper_bound:
-        return self.upper_bound
+        return self.upper_bound * get_sign(self.reverse)
       elif self.output < self.lower_bound:
-        return self.lower_bound
+        return self.lower_bound * get_sign(self.reverse)
       else:
-        return self.output
+        return self.output * get_sign(self.reverse)
     
     return None

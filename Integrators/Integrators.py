@@ -1,6 +1,14 @@
 from __future__ import annotations
 from numpy import ndarray
 
+def Euler(f: function, r: ndarray, t: float, dt: float, response: float = None) -> ndarray:
+  return dt * f(r, t, response)
+
+def RK2(f: function, r: ndarray, t: float, dt: float, response: float = None) -> ndarray:
+  k1 = f(r, t, response)
+  k2 = f(r + k1 * dt / 2, t + dt / 2, response)
+  return dt * k2
+
 def RK4(f: function, r: ndarray, t: float, dt: float, response: float = None) -> ndarray:
   k1 = f(r, t, response)
   k2 = f(r + k1 * dt / 2, t + dt / 2, response)
@@ -10,5 +18,5 @@ def RK4(f: function, r: ndarray, t: float, dt: float, response: float = None) ->
 
 def Verlet(f: function, r: ndarray, t: float, dt: float, response: float = None) -> ndarray:
   r_half = f(r, t, response)
-  r_full = f(r + dt / 2 * r_half, t + dt / 2, response)
+  r_full = f(r + r_half * dt / 2, t + dt / 2, response)
   return dt * r_full
