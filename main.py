@@ -23,7 +23,7 @@ tvc = TVC(
   setpoint=0.0
 )
 
-Kp, Ki, Kd = 0.0, 0.0, 0.0
+Kp, Ki, Kd = 2.5, 0.0, 0.5
 
 pid = PID(
   kp=Kp,
@@ -54,7 +54,7 @@ T = lambda r: 1 / 6 * M * L ** 2 * r[0, 1] ** 2 + 1 / 2 * M * r[0, 1] * r[1, 1] 
 U = lambda r: 1 / 2 * M * g * L * (1 - cos(r[0, 0]))
 E = lambda r: T(r) + U(r)
 
-r = array([[pi + 90 * DEGREES_TO_RADIANS, 0.0], [0.0, 0.0]], dtype=float)
+r = array([[pi + 4 * DEGREES_TO_RADIANS, 0.0], [0.0, 0.0]], dtype=float)
 responses = []
 
 while t < tf:
@@ -74,5 +74,5 @@ while t < tf:
   
   t += dt
 
-#plot(ts, (responses, "PID"), (phi_data, "phi"), (phi_dot_data, "phi dot"), (s_data, "s"), (s_dot_data, "s dot"))
-animate_inverted_pendulum(ts[::SKIPS], phi_data[::SKIPS], s_data[::SKIPS], responses[::SKIPS], L)
+plot(ts, (responses, "PID"), (phi_data, "phi"), (phi_dot_data, "phi dot"), (s_data, "s"), (s_dot_data, "s dot"))
+#animate_inverted_pendulum(ts[::SKIPS], phi_data[::SKIPS], s_data[::SKIPS], responses[::SKIPS], L)
