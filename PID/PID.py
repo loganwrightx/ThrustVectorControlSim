@@ -59,3 +59,6 @@ class PID:
         return self.output * get_sign(self.reverse)
     
     return None
+  
+  def set_target(self, new_target: float) -> None:
+    self.setpoint = new_target
