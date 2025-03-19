@@ -7,7 +7,6 @@ from numpy.random import normal as uniform_random
 g = 9.8
 L = 0.80
 M = 0.636
-k = 1.0
 T = 10.0
 
 PHI, S = 0, 1
@@ -27,8 +26,8 @@ def f(r: ndarray, t: float, response: float | None = None) -> ndarray:
   if response == None:
     response = 0.0
   
-  a_s = (T * sin(phi + response)) / M # additional driving forces in s direction divided by mass
+  a_s = (T * sin(phi + response) + uniform_random()) / M # additional driving forces in s direction divided by mass
   phi_double_dot = -3 * (g * sin(phi) + (L / 2 * phi_dot ** 2 * sin(phi) + a_s) * cos(phi)) / (2 * L * (1 - 3 / 4 * cos(phi) ** 2))
-  s_double_dot = L / 2 * (phi_dot ** 2 * sin(phi) - phi_double_dot * cos(phi)) - k / M * s + a_s
+  s_double_dot = L / 2 * (phi_dot ** 2 * sin(phi) - phi_double_dot * cos(phi)) + a_s
   
   return array([[phi_dot, phi_double_dot], [s_dot, s_double_dot]], dtype=float)

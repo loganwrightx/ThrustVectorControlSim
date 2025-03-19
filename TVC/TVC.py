@@ -3,7 +3,7 @@ from numpy.random import normal as random_normal
 
 sign = lambda n: 1.0 if n >= 0.0 else -1.0
 
-_z_score = 1.645 # 2.5% chance of getting greater than this value, and 2.5% of getting less than the negative of this value
+_z_score = 0.31864 # 25% probability of not having inaccuracies
 
 class TVC:
   value: float
@@ -24,7 +24,7 @@ class TVC:
   def step(self, response: float, dt: float) -> float:
     dt = abs(dt)
     self.setpoint = response
-    if (d:=(self.setpoint - self.value)) <= self.max_rate * dt:
+    if abs(d:=(self.setpoint - self.value)) <= self.max_rate * dt:
       self.value = self.setpoint
     else:
       self.value += sign(d) * self.max_rate * dt
