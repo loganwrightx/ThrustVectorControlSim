@@ -1,5 +1,5 @@
 from __future__ import annotations
-from numpy import array, pi, cos
+from numpy import array, pi, cos, mean
 
 from Differentials.Differentials import f, M, g, L
 from Plotter.Plotter import plot, animate_inverted_pendulum
@@ -7,14 +7,16 @@ from Integrators.Integrators import RK4, Verlet
 from PID.PID import PID
 from TVC.TVC import TVC
 
+mse = lambda x, target: (x - target) ** 2
+
 DEGREES_TO_RADIANS = pi / 180.0
 RADIANS_TO_DEGREES = 180.0 / pi
 
 UPPER_LIMIT_SERVO = 30.0
 LOWER_LIMIT_SERVO = -30.0
 
-UPPER_LIMIT_TARGET = 30.0
-LOWER_LIMIT_TARGET = -30.0
+UPPER_LIMIT_TARGET = 10.0
+LOWER_LIMIT_TARGET = -10.0
 
 SKIPS = 4
 
@@ -26,9 +28,8 @@ tvc = TVC(
   setpoint=0.0
 )
 
-Kp_angle, Ki_angle, Kd_angle = 0.61, 0.0, 0.121
-Kp_position, Ki_position, Kd_position = 9.0, 0.0, 6.55
-#Kp_position, Ki_position, Kd_position = 0.0, 0.0, 0.0
+Kp_angle, Ki_angle, Kd_angle = 0.64211, 0.0, 0.140105
+Kp_position, Ki_position, Kd_position = 18.0, 0.0, 9.5
 
 angular_pid = PID(
   kp=Kp_angle,
@@ -58,7 +59,7 @@ positional_pid = PID(
 
 t = 0.0
 dt = 1e-3
-tf = 40.0
+tf = 10.0
 ts = []
 s_data = []
 phi_data = []
@@ -99,14 +100,14 @@ while t < tf:
     response1 = -30.0
     response2 = 0.0
   
-  if i == 10000:
-    positional_pid.set_target(1.0)
-  
-  if i == 20000:
-    positional_pid.set_target(-1.0)
-  
-  if i == 30000:
-    positional_pid.set_target(0.0)
+  #if i == 10000:
+  #  positional_pid.set_target(1.0)
+  #
+  #if i == 20000:
+  #  positional_pid.set_target(-1.0)
+  #
+  #if i == 30000:
+  #  positional_pid.set_target(0.0)
   
   servo_out = tvc.step(response1 + response2, dt)
   
@@ -114,6 +115,12 @@ while t < tf:
   
   t += dt
   i += 1
+
+target_s = positional_pid.setpoint
+target_phi = angular_pid.setpoint
+
+print(f"MSE of phi: {sum([mse(_phi, target_phi) for _phi in phi_data])}")
+print(f"MSE of s: {sum([mse(_s, target_s) for _s in s_data])}")
 
 #plot(ts, (responses, "PID"), (phi_data, "phi"), (phi_dot_data, "phi dot"), (s_data, "s"), (s_dot_data, "s dot"))
 animate_inverted_pendulum(ts[::SKIPS], phi_data[::SKIPS], s_data[::SKIPS], responses[::SKIPS], L, save=False)
