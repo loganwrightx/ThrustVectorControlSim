@@ -26,7 +26,7 @@ def f(r: ndarray, t: float, response: float | None = None) -> ndarray:
   if response == None:
     response = 0.0
   
-  a_s = (T * sin(phi + response) + uniform_random() * 5) / M # additional driving forces in s direction divided by mass
+  a_s = (T * sin(phi + response)) / M # additional driving forces in s direction divided by mass
   phi_double_dot = -3 * (g * sin(phi) + (L / 2 * phi_dot ** 2 * sin(phi) + a_s) * cos(phi)) / (2 * L * (1 - 3 / 4 * cos(phi) ** 2))
   s_double_dot = L / 2 * (phi_dot ** 2 * sin(phi) - phi_double_dot * cos(phi)) + a_s
   
