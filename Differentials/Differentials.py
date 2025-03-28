@@ -5,7 +5,7 @@ from numpy.random import normal as uniform_random
 δs = 2.5e-1
 
 g = 9.8
-L = 0.80
+L = 0.85
 M = 0.636
 T = 10.0
 

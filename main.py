@@ -12,13 +12,13 @@ mse = lambda x, target: (x - target) ** 2
 DEGREES_TO_RADIANS = pi / 180.0
 RADIANS_TO_DEGREES = 180.0 / pi
 
-UPPER_LIMIT_SERVO = 30.0
-LOWER_LIMIT_SERVO = -30.0
+UPPER_LIMIT_SERVO = 25.0
+LOWER_LIMIT_SERVO = -25.0
 
 UPPER_LIMIT_TARGET = 10
 LOWER_LIMIT_TARGET = -10.0
 
-SKIPS = 4
+SKIPS = 40
 
 tvc = TVC(
   max_degrees_per_sec=90.0,
@@ -29,7 +29,9 @@ tvc = TVC(
 )
 
 Kp_angle, Ki_angle, Kd_angle = 0.64211, 0.0, 0.140105
-Kp_position, Ki_position, Kd_position = 6.0, 0.0, 9.0
+#Kp_angle, Ki_angle, Kd_angle = 6, 0.0, 15
+#Kp_position, Ki_position, Kd_position = 6.0, 0.0, 9.0
+Kp_position, Ki_position, Kd_position = 0.0, 0.0, 0.0
 
 angular_pid = PID(
   kp=Kp_angle,
@@ -58,7 +60,7 @@ positional_pid = PID(
 )
 
 t = 0.0
-dt = 1e-3
+dt = 1e-4
 tf = 40.0
 ts = []
 s_data = []
@@ -74,7 +76,7 @@ T = lambda r: 1 / 6 * M * L ** 2 * r[0, 1] ** 2 + 1 / 2 * M * r[0, 1] * r[1, 1] 
 U = lambda r: 1 / 2 * M * g * L * (1 - cos(r[0, 0]))
 E = lambda r: T(r) + U(r)
 
-r = array([[pi - 5 * DEGREES_TO_RADIANS, 0.0], [0.0, 0.0]], dtype=float)
+r = array([[pi - 20 * DEGREES_TO_RADIANS, 0.0], [0.0, 0.0]], dtype=float)
 responses = []
 
 i = 0
@@ -100,20 +102,20 @@ while t < tf:
     response1 = -30.0
     response2 = 0.0
   
-  if i == 5000:
-    positional_pid.set_target(1.0)
-  
-  elif i == 10000:
-    positional_pid.set_target(-1.0)
-  
-  elif i == 15000:
-    positional_pid.set_target(0.0)
-  
-  elif i == 20000:
-    positional_pid.set_target(2.0)
-  
-  elif i == 25000:
-    positional_pid.set_target(-2.0)
+  #if i == 5000:
+  #  positional_pid.set_target(1.0)
+  #
+  #elif i == 10000:
+  #  positional_pid.set_target(-1.0)
+  #
+  #elif i == 15000:
+  #  positional_pid.set_target(0.0)
+  #
+  #elif i == 20000:
+  #  positional_pid.set_target(2.0)
+  #
+  #elif i == 25000:
+  #  positional_pid.set_target(-2.0)
   
   servo_out = tvc.step(response1 + response2, dt)
   
