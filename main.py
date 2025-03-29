@@ -28,8 +28,8 @@ tvc = TVC(
   setpoint=0.0
 )
 
-Kp_angle, Ki_angle, Kd_angle = 0.64211, 0.0, 0.140105
 #Kp_angle, Ki_angle, Kd_angle = 6, 0.0, 15
+Kp_angle, Ki_angle, Kd_angle = 0.64211, 0.0, 0.140105
 #Kp_position, Ki_position, Kd_position = 6.0, 0.0, 9.0
 Kp_position, Ki_position, Kd_position = 0.0, 0.0, 0.0
 

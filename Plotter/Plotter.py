@@ -37,7 +37,7 @@ def animate_inverted_pendulum(t: float, phi: ndarray, s: ndarray, response: floa
   ax.set_aspect('equal', adjustable='datalim')
   
   rocket, = ax.plot([s[0], s[0] - L * sin(phi[0])], [0, -L * cos(phi[0])])
-  thrust = ax.quiver(s[0], 0.0, -0.5 * sin(phi[0] + response[0]), -0.5 * cos(phi[0] + response[0]), angles="xy", scale_units="xy", color="red")
+  thrust = ax.quiver(s[0], 0.0, -0.5 * sin(phi[0] + response[0]), -0.5 * cos(phi[0] + response[0]), angles="xy", scale_units="xy", color="lightyellow")
   text = ax.text(s[0] - width * 0.9, height / 3, f"s = {s[0]:.3f} m\nφ = {phi[0] * 180.0 / pi - 180:.3f} deg\nθ = {response[0]:.3f} deg\nt = {t[0]:.3f} s")
   
   def update(i):

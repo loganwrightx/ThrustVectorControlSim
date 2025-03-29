@@ -87,4 +87,5 @@ def optimize_s_pid(pid: tuple[float, float, float], N: int = N, test_range = 3, 
   return (p_opt, 0.0, d_opt)
 
 if __name__ == "__main__":
-  optimize_s_pid(pid_position, test_range=4, plot=True)
+  #optimize_s_pid(pid_position, test_range=4, plot=True)
+  optimize_phi_pid(pid_angle, plot=True)

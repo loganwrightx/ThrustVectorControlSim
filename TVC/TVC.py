@@ -30,7 +30,7 @@ class TVC:
       self.value += sign(d) * self.max_rate * dt
     
     if (rv:=random_normal()) > _z_score:
-      return self.value + self.accuracy # introduce randomness
+      return self.value + self.accuracy # introduce random mechanical errors
     elif rv < _z_score:
       return self.value - self.accuracy
     else:

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from numpy import ndarray, sin, cos, array
+from numpy import ndarray, sin, cos, array, tanh
 from numpy.random import normal as uniform_random
 
 δs = 2.5e-1
@@ -26,7 +26,9 @@ def f(r: ndarray, t: float, response: float | None = None) -> ndarray:
   if response == None:
     response = 0.0
   
-  a_s = (T * sin(phi + response)) / M # additional driving forces in s direction divided by mass
+  response = 0.3 * tanh(response * 3.5) # models the nonlinear actuation which actually occurs in the mechanism
+  
+  a_s = (T * sin(phi + response) + 5 * uniform_random()) / M # additional driving forces in s direction divided by mass
   phi_double_dot = -3 * (g * sin(phi) + (L / 2 * phi_dot ** 2 * sin(phi) + a_s) * cos(phi)) / (2 * L * (1 - 3 / 4 * cos(phi) ** 2))
   s_double_dot = L / 2 * (phi_dot ** 2 * sin(phi) - phi_double_dot * cos(phi)) + a_s
   
