@@ -61,7 +61,7 @@ positional_pid = PID(
 
 t = 0.0
 dt = 1e-4
-tf = 40.0
+tf = 5.0
 ts = []
 s_data = []
 phi_data = []
@@ -76,7 +76,7 @@ T = lambda r: 1 / 6 * M * L ** 2 * r[0, 1] ** 2 + 1 / 2 * M * r[0, 1] * r[1, 1] 
 U = lambda r: 1 / 2 * M * g * L * (1 - cos(r[0, 0]))
 E = lambda r: T(r) + U(r)
 
-r = array([[pi - 20 * DEGREES_TO_RADIANS, 0.0], [0.0, 0.0]], dtype=float)
+r = array([[pi - 1 * DEGREES_TO_RADIANS, 0.0], [0.0, 0.0]], dtype=float)
 responses = []
 
 i = 0
